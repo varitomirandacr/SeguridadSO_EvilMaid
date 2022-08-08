@@ -12,8 +12,8 @@ indetectable para poder acceder más tarde al dispositivo o a los datos
 que contiene.
 
 - Integrantes:
--- Alvaro Andrei Miranda Muñoz - 2022438448
--- Juan Jose Araya Castro - 2015138766
+    - Alvaro Andrei Miranda Muñoz - 2022438448
+    - Juan Jose Araya Castro - 2015138766
 
 ## Requerimientos
 - Programa basado en "EvilMaid" utilizando bash 
