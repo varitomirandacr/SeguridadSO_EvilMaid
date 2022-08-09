@@ -1,14 +1,23 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage{booktabs}
-\usepackage{enumitem}
-\usepackage{amsmath}
-\usepackage{amssymb}     
-\newcommand{\statisticalDistance}[1]{\Delta(X,Y)={#1}}
 
-\title{Tarea 1 - Principios de Seguridad en Sistemas Operativos}
-\author{Alvaro Andrei Miranda & Juan Jose Araya Castro}
-\date{Agosto 2022}
+\usepackage{hyperref}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+    
+\urlstyle{same}
+    
+\title{Principios de Seguridad en Sistemas Operativos \\ Tarea 1 Evil Maid}
+\author{Juan Jose Araya Castro \\
+Alvaro Andrei Miranda Muñoz}
+\date{August 2022}
 
 \begin{document}
 
@@ -19,27 +28,150 @@ Código curso: MC1005\\
 Due: Agosto 8, 2022 at 23:59 (CST)\\
 Total puntos: 10 puntos\\
 \end{minipage}
-
-
-https://theinvisiblethings.blogspot.com/2009/10/evil-maid-goes-after-truecrypt.html
-https://www.sidechannel.blog/en/evil-maid-attack-on-computers-with-encrypted-disks/
-https://docs.huihoo.com/linux/kernel/a1/index.html#:~:text=The%20Linux%20kernel%20is%20one,the%20inter-process%20communication%20interface.
-https://www.kali.org/tools/binwalk/
-https://www.shellscript.sh/variables1.html
-https://www.pcresumen.com/menu-software/33-scripting/bash/51-operaciones-aritmeticas-y-la-logica-en-bash#:~:text="%2F"%3A%20Para%20dividir%20valores.
-https://www.cyberciti.biz/faq/copy-command/
-https://www.wzdftpd.net/blog/implementing-the-evil-maid-attack-on-linux-with-luks.html
-https://www.darknet.org.uk/2017/07/evilabigail-automated-evil-maid-attack-for-linux/#google_vignette
-https://github.com/AonCyberLabs/EvilAbigail/blob/master/evilmaid.py
-https://cinetruth.com/evil-maid-attack/
-https://stackoverflow.com/questions/tagged/initrd
-https://github.com/kmille/evil-maid-attack-on-encrypted-boot/blob/main/extract-core.py
-https://github.com/topics/evil-maid
-https://github.com/robertchrk/evilmaid
-https://github.com/kmille/evil-maid-attack-on-encrypted-boot
-https://github.com/nyxxxie/de-LUKS
-
-
     
+\section*{Introducción}
+El objetivo del proyecto es lograr el control y manipulación de un computador ejecutando el ataque llamado "EvilMaid". Para lograr dicho ataque se necesita desarrollar una aplicación, código o script que pueda inyectarse en la máquina de la víctima mediante el acceso físico, en donde se conecta un USB booteable que permita la modificación de archivos de booteo del sistema. Para el desarrollo de este proyecto se utilizará el sistema operativo de Linux/Ubuntu.
+
+\section*{Instrucciones Generales}
+
+desc bla bla bla 
+
+\begin{enumerate}
+  \item Iniciar el sistema de la victima mediante un usb booteable
+  
+  \item Montar archivos del sistema de la víctima
+  
+  \item Obtener permisos de escritura en carpetas de boot
+  
+  \item Inspeccionar el kernel mediante el binwalk para comprobar los archivos de microcode versus el paquete del initrd
+  
+  \item Modificar el script con los parámetros que generan el reverse shell
+  
+  \item Copiar un script dentro de la particion del boot
+  
+  \item Ejecutar el script para aplicar los cambios y vulnerar la máquina de la víctima
+  
+  \item Apagar la computadora de la víctima, como si nada hubiese ocurrido, para posteriormente esperar que el usuario siendo atacado encienda la computadora y active el ataque cuando ingrese la clave para desencriptar el sistema operativo
+  
+\end{enumerate}
+
+
+\section*{Descripción del Ataque}
+
+\tab El ataque de EvilMaid es un caso particular, en donde se requiere acceso físico a la máquina de la víctima. Uno de los ejemplos más icónicos de este ataque se presenta como el de un usario que deja su máquina desatendida en algún sitio, por ejemplo, habitación de un hotel, sala compartida, por que no un espacio de coworking y en el que este usuario deja su máquina desatendida por un tiempo. Este escenario parecería ser parte de una película de ciencia ficción o de acción sin embargo se ha comprobado que en efecto ha sucedido. \\
+
+Una vez que el usuario ha desatendido su máquina, el atacante reinicia la computadora utilizando un USB booteable. En donde modificando algunos de los archivos de booteo logra remplazar estos archivos con código malicioso que funcionará como la puerta de entrada y la base para un "exploit" del sistema.
+\\
+\\
+Según Wikipedia existen dos tipos de ataques de "EvilMaid":
+
+\begin{enumerate}
+
+  \item Classic evil maid: \\
+  Ataque en el que se ejecuta ya sea con discos con o sin encriptación y se compromete el firmware de la máquina mediante la modificación de archivos.
+  
+  \item Network evil maid: \\
+  Ataque en el cual el atacante simula una pantalla de booteo idéntica a la del sistema operativo y envía mediante la red el usuario y el password para accesar la máquina de manera remota.
+
+\end{enumerate}
+
+Por otra parte durante la investigación del proyecto encontramos algunas fuentes que proporcionaban información util para entender las diferentes variantes de los ataques de "Evil Maid". 
+
+\begin{enumerate}
+
+  \item Inyección de Malware: \\
+  Se realiza cuando la máquina carece de clave de ingreso, inyectando con facilidad cualquier código malicioso.
+  
+  \item Comprometer firmware o BIOS: \\
+  Se roba el user y password de la máquina junto con la información de red, enviándola al atacante.
+  
+  \item Sidestepping
+  Se esquivan las opciones de seguridad del OS y del boot mediante el DMA (Direct Access Memory) attack
+  
+  \item Remplazo de panatalla de inicio del Boot: \\
+  Básicamente un ataque de tipo networking de evil maid donde se reemplaza la pantalla de inicio en el booteo de la máquina y este ingresa al sistema operativo de manera transparente mientras envía la información del user y pass al atacante
+  
+  \item Malas prácticas en el Unified Extensible Firmware Interface (UEFI): \\ 
+  Para realizar el ataque de EvilMaid de manera práctica y sencilla se debe realizar en sistemas que no implementen las opciones de seguridad del UEFI como por ejemplo, secure boot y el TPM (Trusted Platform Module)
+  
+\end{enumerate}
+
+\section*{Documentación del Ataque}
+
+\href{https://drive.google.com/file/d/16Z2BiQohqdr1lCqQlngj6nGgPOOHObtK/view?usp=sharing}{Alvaro Miranda - Juan Jose Araya - EvilMaid Attack v1.0}
+
+\section*{Autoevaluación}
+
+\begin{enumerate}
+    \item Estado Final:
+    \item Problemas Encontrados:
+    \item Limitaciones Adicionales:
+    \item Reporte de Commits en Git:
+    \item Evaluación:
+\end{enumerate}
+
+    \noindent\rule{10cm}{0.4pt} \\
+    Rubro   \qquad \qquad \qquad \qquad Puntaje Total    \qquad  Puntaje Obtenido \\
+    \noindent\rule{10cm}{0.4pt} \\
+    Inyección y Ejecución \\ 
+    de Evil Maid Attack: \qquad \qquad \ 50 \qquad \\ 
+    \noindent\rule{10cm}{0.1pt} \\
+    EM Shell \qquad \qquad \qquad \qquad \quad \ \ 30 \qquad \\
+    \noindent\rule{10cm}{0.1pt} \\
+    Documentación del Ataque \qquad 20 \qquad
+
+\section*{Lecciones Aprendidas}
+
+Este proyecto de Evil Maid nos dejó múltiples enseñanzas que sin duda alguna, nos ha abierto los ojos acerca de lo vulnerables que son los sistemas y las computadoras ante ataques no solo de software, phishing, malware, etc sino de algo tan simple como dejar una máquina desatendida que no tenga o cumpla con los estándares básicos de seguridad. Sin embargo dentro de los puntos más significativos que podemos mencionar se encuentran:
+
+\begin{enumerate}
+    \item En relación a este ataque nos parece que el más importante es, NO dejar la computadora desatendida.
     
+    \item En su defecto deshabilitar puertos de USB, CD/DVD
+    
+    \item Mantener el SO actualizado con las últimas versiones
+    
+    \item Implementar las recomendaciones, estándares y buenas prácticas de seguridad conocidas en el mercado por los expertos
+    
+    \item Implementar software de defensa, prevención y detección de ataques
+    
+\end{enumerate}
+
+\section*{Bibliografía}
+
+\begin{itemize}
+  \item Evil Maid: Attack on Computers with Encrypted Disks $\mid$ SideChannel – Tempest. \href{https://sidechannel.blog/en/evil-maid-attack-on-computers-with-encrypted-disks/}{   EvilMaid attack on computers with encrypted disk}.
+  
+  \item Pollux’s Corner. \href{https://www.wzdftpd.net/blog/implementing-the-evil-maid-attack-on-linux-with-luks.html}{Implementing EvilMaid attack on Linux with Luks}.
+  
+  \item EvilAbigail - Automated Evil Maid Attack For Linux - Darknet. 29 July 2017, \href{https://www.darknet.org.uk/2017/07/evilabigail-automated-evil-maid-attack-for-linux/}{EvilAbigail automated evilmaid attack for linux}.
+  
+  \item Github: EvilAbigail. \href{https://github.com/AonCyberLabs/EvilAbigail/}{AonCyberLabs/EvilAbigail}.
+  
+  \item Farooque, Md. Evil Maid Attack. 1 July 2022, \href{https://cinetruth.com/evil-maid-attack/}{Evil maid attack}.
+  
+  \item Newest “initrd” Questions. \href{https://stackoverflow.com/questions/tagged/initrd}{Stack overflow initrd}
+  
+  \item Github: EvilMaid attack on encrypted boot. \href{https://github.com/kmille/evil-maid-attack-on-encrypted-boot/blob/main/extract-core.py}{EvilMaid attack on encrypted boot}.
+  
+  \item Github: EvilMaid attack on encrypted boot. \href{https://github.com/kmille/evil-maid-attack-on-encrypted-boot/blob/main/extract-core.py}{EvilMaid attack on encrypted boot}.
+  
+  \item Github: Topics EvilMaid \href{https://github.com/topics/evil-maid}{Topics EvilMaid}.
+  
+  \item Github: robertchrk EvilMaid \href{https://github.com/robertchrk/evilmaid}{Robertchrk EvilMaid}.
+  
+  \item Github: kmille EvilMaid on encrypted boot \href{https://github.com/kmille/evil-maid-attack-on-encrypted-boot}{kmille EvilMaid on Encrypted boot}.
+  
+  \item Github: nyxxxie de-LUKS \href{https://github.com/nyxxxie/de-LUKS}{nyxxxie de-LUKS}.
+  
+  \item Evil Maid Attack. \href{https://encyclopedia.kaspersky.com/glossary/evil-maid/}{karpersky evilmaid}. 
+  
+  \item Evil Maid Attack. 27 Oct. 2021. Wikipedia, \href{https://en.wikipedia.org/w/index.php?title=Evil_maid_attack&oldid=1052101751}{Wikipedia EvilMaid attack}. 
+  
+\end{itemize}
+
+
+
+
+
 \end{document}
