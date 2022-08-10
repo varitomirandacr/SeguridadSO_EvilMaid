@@ -15,7 +15,7 @@
 \urlstyle{same}
     
 \title{Principios de Seguridad en Sistemas Operativos \\ Tarea 1 Evil Maid}
-\author{Juan Jose Araya Castro \\
+\author{Juan José Araya Castro \\
 Alvaro Andrei Miranda Muñoz}
 \date{August 2022}
 
@@ -34,10 +34,12 @@ El objetivo del proyecto es lograr el control y manipulación de un computador e
 
 \section*{Instrucciones Generales}
 
-desc bla bla bla 
+Para realizar este ataque es necesario dos maquinas virtuales de Linux para el atacante cualquier versión y el caso del atacado de la versión 18.04 o inferior. Una vez que se configuran los dos equipos por separado el equipo del atacante debe configurar su IP para esperar la respuesta del código inyectado en la PC atacada. Es importante denotar que el equipo atacado debe estar conectado a la misma red del atacante o a internet para poder realizar la conexión del reverse shell.
+
+En la maquina virtual del atacado de debe montar el "USB" del atacante que nuestro caso sera el disco duro virtual, de la maquina virtual configurada como "Atacante". A continuación los pasos para realizar el ataque:
 
 \begin{enumerate}
-  \item Iniciar el sistema de la victima mediante un usb booteable
+  \item Iniciar el sistema de la víctima mediante un usb booteable
   
   \item Montar archivos del sistema de la víctima
   
@@ -47,7 +49,7 @@ desc bla bla bla
   
   \item Modificar el script con los parámetros que generan el reverse shell
   
-  \item Copiar un script dentro de la particion del boot
+  \item Copiar un script dentro de la partición del boot
   
   \item Ejecutar el script para aplicar los cambios y vulnerar la máquina de la víctima
   
@@ -96,29 +98,29 @@ Por otra parte durante la investigación del proyecto encontramos algunas fuente
   
 \end{enumerate}
 
-\section*{Documentación del Ataque}
+\section*{Video ejecución del Ataque}
 
 \href{https://drive.google.com/file/d/16Z2BiQohqdr1lCqQlngj6nGgPOOHObtK/view?usp=sharing}{Alvaro Miranda - Juan Jose Araya - EvilMaid Attack v1.0}
 
 \section*{Autoevaluación}
 
 \begin{enumerate}
-    \item Estado Final:
-    \item Problemas Encontrados:
-    \item Limitaciones Adicionales:
-    \item Reporte de Commits en Git:
-    \item Evaluación:
+    \item Estado Final: Completado
+    \item Problemas Encontrados: Complejidad de seguridad entre versiones de Linux
+    \item Limitaciones Adicionales: Estructura y rangos de datos en el tamaño del Kernel (Linux)
+    \item Reporte de Commits en Git: \href{https://github.com/varitomirandacr/SeguridadSO_EvilMaid/commits/main}{Commits History}
+    \item Evaluación: 100%
 \end{enumerate}
 
     \noindent\rule{10cm}{0.4pt} \\
     Rubro   \qquad \qquad \qquad \qquad Puntaje Total    \qquad  Puntaje Obtenido \\
     \noindent\rule{10cm}{0.4pt} \\
     Inyección y Ejecución \\ 
-    de Evil Maid Attack: \qquad \qquad \ 50 \qquad \\ 
+    de Evil Maid Attack: \qquad \qquad \ 50 \qquad \qquad \qquad50 \\ 
     \noindent\rule{10cm}{0.1pt} \\
-    EM Shell \qquad \qquad \qquad \qquad \quad \ \ 30 \qquad \\
+    EM Shell \qquad \qquad \qquad \qquad \quad \ \ 30 \qquad \qquad \qquad 30\\
     \noindent\rule{10cm}{0.1pt} \\
-    Documentación del Ataque \qquad 20 \qquad
+    Documentación del Ataque \qquad 20 \qquad \qquad \qquad 20
 
 \section*{Lecciones Aprendidas}
 
